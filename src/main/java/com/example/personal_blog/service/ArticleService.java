@@ -1,6 +1,7 @@
 package com.example.personal_blog.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
-     public Article createArticle(ArticleCreateRequest newArticle){
+    public Article createArticle(ArticleCreateRequest newArticle){
         Article article = new Article();
 
         article.setTitle(newArticle.title());
@@ -40,13 +41,20 @@ public class ArticleService {
 
     public Article updateArticle(Integer id, ArticleUpdateRequest updatedArticle){
         return articleRepository.findById(id).map(article -> {
-            article.setCategory(updatedArticle.category());
-            article.setContent(updatedArticle.content());
-            article.setTitle(updatedArticle.title());
-            article.setTags(updatedArticle.tags());
+            if(Objects.nonNull(updatedArticle.category())){
+                article.setCategory(updatedArticle.category());
+            }
+            if(Objects.nonNull(updatedArticle.content())){
+                article.setContent(updatedArticle.content());
+            }
+            if(Objects.nonNull(updatedArticle.title())){
+                article.setTitle(updatedArticle.title());
+            }
+            if(Objects.nonNull(updatedArticle.tags())){
+                article.setTags(updatedArticle.tags());
+            }   
             return articleRepository.save(article);
         }).orElseThrow(() -> new ResourceAccessException("Article not found"));
-
     }
 
    

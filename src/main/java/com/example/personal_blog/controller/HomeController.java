@@ -7,6 +7,7 @@ import com.example.personal_blog.service.ArticleService;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,11 @@ public class HomeController {
     public ResponseEntity<List<Article>> articles(){
         LOGGER.info("Calling ArticleService");
         return ResponseEntity.ok().body(articleService.getAllArticles());
+    }
+
+    @GetMapping("/api/v1/articles/{id}")
+    public ResponseEntity<Article> articleById(){
+        return ResponseEntity.ok().body(articleService.getArticleById());
     }
 
     @PostMapping("/api/v1/articles")
