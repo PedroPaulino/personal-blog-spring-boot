@@ -28,6 +28,11 @@ public class ArticleService {
         return articleRepository.findAll();
     }
 
+    public Article getArticleById(Integer id){
+        return articleRepository.findById(id).orElseThrow(() -> new ResourceAccessException("Article with id: " + id + " not found.")
+        );
+    }
+
     public Article createArticle(ArticleCreateRequest newArticle){
         Article article = new Article();
 

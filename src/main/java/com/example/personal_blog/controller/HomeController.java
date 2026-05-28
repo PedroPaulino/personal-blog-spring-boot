@@ -36,8 +36,8 @@ public class HomeController {
     }
 
     @GetMapping("/api/v1/articles/{id}")
-    public ResponseEntity<Article> articleById(){
-        return ResponseEntity.ok().body(articleService.getArticleById());
+    public ResponseEntity<Article> articleById(@PathVariable Integer id){
+        return ResponseEntity.ok().body(articleService.getArticleById(id));
     }
 
     @PostMapping("/api/v1/articles")
