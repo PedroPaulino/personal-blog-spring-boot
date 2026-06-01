@@ -62,6 +62,17 @@ public class ArticleService {
         }).orElseThrow(() -> new ResourceAccessException("Article not found"));
     }
 
+    public String deleteArticleById(Integer id){
+        try {
+            this.getArticleById(id);
+        } catch (Exception e) {
+            new ResourceAccessException("Article with id: " + id + " not found.");
+        }
+        articleRepository.deleteById(id);
+
+        return "Deleted article with id: " + id;
+    }
+
    
 
 }
