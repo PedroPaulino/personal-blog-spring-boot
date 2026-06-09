@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
+import com.example.personal_blog.controller.HomeController;
 import com.example.personal_blog.dto.ArticleCreateRequest;
 import com.example.personal_blog.dto.ArticleUpdateRequest;
 import com.example.personal_blog.model.Article;
@@ -16,7 +19,7 @@ import com.example.personal_blog.repository.ArticleRepository;
 // Validate data before repository calls
 @Service
 public class ArticleService {
-    
+    Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
     private final ArticleRepository articleRepository;
 
     // Loose Coupling - Spring IoC container
@@ -45,6 +48,7 @@ public class ArticleService {
     }
 
     public Article updateArticle(Integer id, ArticleUpdateRequest updatedArticle){
+        LOGGER.error("Article ID: " + id);
         return articleRepository.findById(id).map(article -> {
             if(Objects.nonNull(updatedArticle.category())){
                 article.setCategory(updatedArticle.category());

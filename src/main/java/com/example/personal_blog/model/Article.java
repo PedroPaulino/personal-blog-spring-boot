@@ -1,5 +1,6 @@
 package com.example.personal_blog.model;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,7 +14,10 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity
@@ -28,11 +32,11 @@ public class Article {
     private String category;
     private String tags;
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "timestamp(6) with time zone")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false, columnDefinition = "timestamp(6) with time zone")
     private LocalDateTime updatedAt;
 
      public Integer getId() {
@@ -112,12 +116,12 @@ public class Article {
 
     @PrePersist
     protected void onCreate(){
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
     }
 
     @PreUpdate
     protected void onUpdate(){
-        updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
     }
 }
