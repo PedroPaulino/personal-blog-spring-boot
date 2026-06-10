@@ -48,6 +48,12 @@ public class HomeController {
         return ResponseEntity.ok().body(articleService.getArticleById(id));
     }
 
+    @GetMapping("/api/v1/admin/articles")
+    public ResponseEntity<List<Article>> adminArticles(){
+        LOGGER.info("Calling ArticleService");
+        return ResponseEntity.ok().body(articleService.getAllArticles());
+    }
+
     @PostMapping("/api/v1/admin/articles")
     public ResponseEntity<Article> createArticle(@RequestBody ArticleCreateRequest request){
             Article response = articleService.createArticle(request);
