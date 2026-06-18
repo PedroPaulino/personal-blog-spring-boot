@@ -7,6 +7,12 @@ export function ensureAuth(){
     const password = prompt("Password");
 
     const encoded = btoa(`${username}:${password}`);
-
+    
     localStorage.setItem("basicAuth", encoded);
+}
+
+export function cleanAuth(){
+    if (!localStorage.getItem("basicAuth"))
+        return;
+    localStorage.clear();
 }
