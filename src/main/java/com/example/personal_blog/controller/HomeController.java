@@ -62,6 +62,7 @@ public class HomeController {
 
     @PutMapping("/api/v1/admin/articles/{id}")
     public ResponseEntity<Article> updateArticle(@PathVariable Integer id, @RequestBody ArticleUpdateRequest request){
+        LOGGER.info("Put request {}", request);
         Article response = articleService.updateArticle(id, request);
         return ResponseEntity.ok(response);
         

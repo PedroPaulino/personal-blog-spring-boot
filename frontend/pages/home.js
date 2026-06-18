@@ -1,4 +1,4 @@
-import { getArticles } from "../js/api";
+import { getArticles } from "../js/api.js";
 
 export async function renderHome() {
     const app = document.getElementById("app");
@@ -8,8 +8,8 @@ export async function renderHome() {
         articles.map(article => `
             <div class="card">
                 <h2>
-                    <a href="/articles/${article.id}">
-                        ${article.article}
+                    <a href="/article/${article.id}">
+                        ${article.title}
                     </a>
                 </h2>
 
