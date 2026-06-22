@@ -11,36 +11,64 @@ export async function renderAdmin() {
     const articles = await getAdminArticles();
 
     document.getElementById("app").innerHTML = `
-        <div style="margin-bottom:20px;">
-            <a href="/new" class="btn btn-primary">
-                Novo Artigo
-            </a>
-        </div>
 
-        ${
-            articles.map(article => `
-                <div class="card">
+<section class="admin-container">
 
-                    <h2>${article.title}</h2>
+    <div class="admin-header">
 
-                    <br/>
+        <h1>Artigos</h1>
 
-                    <a
-                      href="/edit/${article.id}"
-                      class="btn btn-warning">
-                        EDIT
-                    </a>
+        <a
+            href="/new"
+            class="btn btn-primary">
 
-                    <button
-                      class="btn btn-danger delete-btn"
-                      data-id="${article.id}">
-                        DELETE
-                    </button>
+            + Novo Artigo
 
-                </div>
-            `).join("")
-        }
-    `;
+        </a>
+
+    </div>
+
+    <div class="admin-list">
+
+        ${articles.map(article => `
+
+        <article class="admin-article">
+
+            <h2>${article.title}</h2>
+
+            <p>
+                ${article.content.substring(0, 120)}...
+            </p>
+
+            <div class="admin-actions">
+
+                <a
+                    href="/edit/${article.id}"
+                    class="btn btn-secondary">
+
+                    Editar
+
+                </a>
+
+                <button
+                    class="btn btn-danger delete-btn"
+                    data-id="${article.id}">
+
+                    Excluir
+
+                </button>
+
+            </div>
+
+        </article>
+
+        `).join("")}
+
+    </div>
+
+</section>
+
+`;
 
     document.querySelectorAll(".delete-btn")
         .forEach(button => {

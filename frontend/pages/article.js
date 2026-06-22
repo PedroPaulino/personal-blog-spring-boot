@@ -2,35 +2,67 @@ import { getArticle } from "../js/api.js";
 
 export async function renderArticle(id) {
 
+    console.log(document.getElementById("app"))
+
     const article = await getArticle(id);
+
+    const content = article.content
+        .split("\n")
+        .filter(p => p.trim())
+        .map(p => `<p>${p}</p>`)
+        .join("");
     
-    document.getElementById("app").innerHTML = `
-        <div class="card">
+    const tags =
+        typeof article.tags === "string"
+            ? article.tags.split(",")
+            : article.tags || [];
+    
+    document.getElementById("app").innerHTML = 
+    `
+
+        <article class="article-page">
+
+            <div class="article-category">
+                ${article.category}
+            </div>
 
             <h1>${article.title}</h1>
 
             <p class="meta">
+
                 ${new Date(article.createdAt)
-                    .toLocaleDateString()}
+                    .toLocaleDateString("en-US", {
+                        month:"long",
+                        day:"numeric",
+                        year:"numeric"
+                    })}
+
             </p>
 
-            <br>
+            <div class="article-content">
 
-            <p>${article.content}</p>
+                ${content}
 
-            <br>
+            </div>
 
-            <p>
-                <strong>Categoria:</strong>
-                ${article.category}
-            </p>
+            <div class="article-info">
 
-            <p>
-                <strong>Tags:</strong>
-                ${article.tags}
-            </p>
+                <strong>Tags</strong>
 
-        </div>
+                <div class="tags">
+
+                    ${tags.map(tag => `
+                        <span class="tag">
+                            ${tag.trim()}
+                        </span>
+                    `).join("")}
+
+                </div>
+
+            </div>
+
+        </article>
+
     `;
 
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
 
@@ -28,7 +29,9 @@ public class ArticleService {
     }
 
     public List<Article> getAllArticles(){
-        return articleRepository.findAll();
+        return articleRepository.findAll(
+            Sort.by(Sort.Direction.DESC, "createdAt")
+        );
     }
 
     public Article getArticleById(Integer id){

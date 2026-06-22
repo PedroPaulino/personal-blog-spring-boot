@@ -1,8 +1,13 @@
 import { router } from "./router.js"
 
-router();
 
-window.addEventListener("popstate", router());
+window.addEventListener("DOMContentLoaded", () => {
+    router();
+})
+
+window.addEventListener("popstate", () => {
+    router();
+});
 
 document.addEventListener("click", e => {
     const link = e.target.closest("a");
