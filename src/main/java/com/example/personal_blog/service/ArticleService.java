@@ -2,7 +2,6 @@ package com.example.personal_blog.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.web.client.ResourceAccessException;
 import com.example.personal_blog.controller.HomeController;
 import com.example.personal_blog.dto.ArticleCreateRequest;
 import com.example.personal_blog.dto.ArticleUpdateRequest;
+import com.example.personal_blog.exception.ArticleException;
 import com.example.personal_blog.model.Article;
 import com.example.personal_blog.repository.ArticleRepository;
 
@@ -40,6 +40,9 @@ public class ArticleService {
     }
 
     public Article createArticle(ArticleCreateRequest newArticle){
+
+        isValidArticleRequest(newArticle);
+
         Article article = new Article();
 
         article.setTitle(newArticle.title());
@@ -78,6 +81,19 @@ public class ArticleService {
         articleRepository.deleteById(id);
 
         return "Deleted article with id: " + id;
+    }
+
+    private void isValidArticleRequest(ArticleCreateRequest articleRequest) throws ArticleException{
+        
+        if (articleRequest.title() == null || articleRequest.content() == null || articleRequest.category() == null || articleRequest.tags() == null ){
+            throw new ArticleException("The fields cannot be null");
+        }else if(articleRequest.title().isEmpty() || articleRequest.title().isBlank()){
+            throw new ArticleException("Article Title must be filled");
+        }else if(articleRequest.content().length() < 240){
+            throw new ArticleException("Article Content must be higher than 240 chars.");
+        }else if(articleRequest.category().isEmpty() || articleRequest.category().isBlank()){
+            throw new ArticleException("Article Category must be filled.");
+        }
     }
 
    
