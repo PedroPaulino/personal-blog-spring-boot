@@ -7,15 +7,9 @@ import com.example.personal_blog.service.ArticleService;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 // Constructor Injection (explicit dependencies)
-@RestController
+@RestControllerAdvice
 public class HomeController {
     private final ArticleService articleService;
     Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
@@ -36,7 +29,7 @@ public class HomeController {
     HomeController(ArticleService articleService){
         this.articleService = articleService;
     }
-
+    
     @GetMapping("/api/v1/public/articles")
     public ResponseEntity<List<Article>> articles(){
         LOGGER.info("Calling ArticleService");

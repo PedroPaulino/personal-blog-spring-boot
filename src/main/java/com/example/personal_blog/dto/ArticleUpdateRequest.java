@@ -21,6 +21,8 @@ public record ArticleUpdateRequest(
     @NotBlank(message = "Article Category must be filled.")
     String category, 
     
+    @NotNull
+    @NotBlank(message = "Article Tags must be filled.")
     String tags
 
 ) {}

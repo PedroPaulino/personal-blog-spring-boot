@@ -56,18 +56,10 @@ public class ArticleService {
     public Article updateArticle(Integer id, ArticleUpdateRequest updatedArticle){
         LOGGER.error("Article ID: " + id);
         return articleRepository.findById(id).map(article -> {
-            if(Objects.nonNull(updatedArticle.category())){
                 article.setCategory(updatedArticle.category());
-            }
-            if(Objects.nonNull(updatedArticle.content())){
                 article.setContent(updatedArticle.content());
-            }
-            if(Objects.nonNull(updatedArticle.title())){
                 article.setTitle(updatedArticle.title());
-            }
-            if(Objects.nonNull(updatedArticle.tags())){
-                article.setTags(updatedArticle.tags());
-            }   
+                article.setTags(updatedArticle.tags());  
             return articleRepository.save(article);
         }).orElseThrow(() -> new ResourceAccessException("Article not found"));
     }
@@ -91,8 +83,11 @@ public class ArticleService {
             throw new ArticleException("Article Title must be filled");
         }else if(articleRequest.content().length() < 240){
             throw new ArticleException("Article Content must be higher than 240 chars.");
-        }else if(articleRequest.category().isEmpty() || articleRequest.category().isBlank()){
+        }else if(articleRequest.category().isEmpty() ||             articleRequest.category().isBlank()){
             throw new ArticleException("Article Category must be filled.");
+        }else if(articleRequest.tags().isEmpty() ||
+                 articleRequest.tags().isBlank()){
+            throw new ArticleException("Article Tags must be filled.");
         }
     }
 
