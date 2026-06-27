@@ -75,6 +75,7 @@ public class ArticleService {
         return "Deleted article with id: " + id;
     }
 
+    // This method could be centralized on DTO, however I let here only for study purpose
     private void isValidArticleRequest(ArticleCreateRequest articleRequest) throws ArticleException{
         
         if (articleRequest.title() == null || articleRequest.content() == null || articleRequest.category() == null || articleRequest.tags() == null ){

@@ -5,6 +5,8 @@ import com.example.personal_blog.dto.ArticleUpdateRequest;
 import com.example.personal_blog.model.Article;
 import com.example.personal_blog.service.ArticleService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,15 +14,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+import org.springframework.web.bind.annotation.RestController;
 // Constructor Injection (explicit dependencies)
-@RestControllerAdvice
+@RestController
 public class HomeController {
     private final ArticleService articleService;
     Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
@@ -48,13 +50,13 @@ public class HomeController {
     }
 
     @PostMapping("/api/v1/admin/articles")
-    public ResponseEntity<Article> createArticle(@RequestBody ArticleCreateRequest request){
+    public ResponseEntity<Article> createArticle(@Valid @RequestBody ArticleCreateRequest request){
             Article response = articleService.createArticle(request);
             return ResponseEntity.ok(response);  
     }
 
     @PutMapping("/api/v1/admin/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Integer id, @RequestBody ArticleUpdateRequest request){
+    public ResponseEntity<Article> updateArticle(@Valid @PathVariable Integer id, @RequestBody ArticleUpdateRequest request){
         LOGGER.info("Put request {}", request);
         Article response = articleService.updateArticle(id, request);
         return ResponseEntity.ok(response);
