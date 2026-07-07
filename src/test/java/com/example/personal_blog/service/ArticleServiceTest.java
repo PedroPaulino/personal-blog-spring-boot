@@ -1,16 +1,13 @@
 package com.example.personal_blog.service;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +19,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.client.ResourceAccessException;
 
 import com.example.personal_blog.dto.ArticleCreateRequest;
 import com.example.personal_blog.dto.ArticleUpdateRequest;
+import com.example.personal_blog.exception.ArticleException;
 import com.example.personal_blog.model.Article;
 import com.example.personal_blog.repository.ArticleRepository;
 
@@ -81,10 +78,10 @@ public class ArticleServiceTest {
         List<Article> response = articleService.getAllArticles();
 
         // Assert
-        assertTrue(response.contains(article1));
-        assertTrue(response.contains(article2));
-        assertTrue(response.contains(article3));
-
+        assertEquals(3, response.size());
+        assertEquals(article1, response.get(0));
+        assertEquals(article2, response.get(1));
+        assertEquals(article3, response.get(2));
     }
 
     @Test
@@ -120,7 +117,7 @@ public class ArticleServiceTest {
             .thenReturn(Optional.empty());
         
         // Act
-        ResourceAccessException exception = assertThrows(ResourceAccessException.class, () -> articleService.getArticleById(1));
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.getArticleById(1));
         
         // Assert
         assertEquals("Article with id: " + 1 + " not found.", exception.getMessage());
@@ -168,7 +165,7 @@ public class ArticleServiceTest {
     }
     
     @Test
-    void shouldUpdateOnlyTheTitle(){
+    void shouldUpdateArticleSuccessfully(){
         // Arrange
         ArticleUpdateRequest request = new ArticleUpdateRequest(
             "New Title",
@@ -224,6 +221,7 @@ public class ArticleServiceTest {
         String response = articleService.deleteArticleById(1);
 
         // Assert
+        verify(articleRepository).deleteById(1);
         assertNotNull(response);
         assertEquals("Deleted article with id: " + existingArticle.getId(), response);
     }

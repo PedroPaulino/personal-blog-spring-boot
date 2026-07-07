@@ -1,13 +1,11 @@
 package com.example.personal_blog.service;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 
 import com.example.personal_blog.controller.HomeController;
 import com.example.personal_blog.dto.ArticleCreateRequest;
@@ -29,18 +27,20 @@ public class ArticleService {
     }
 
     public List<Article> getAllArticles(){
+        LOGGER.info("Getting all articles");
         return articleRepository.findAll(
             Sort.by(Sort.Direction.DESC, "createdAt")
         );
     }
 
     public Article getArticleById(Integer id){
-        return articleRepository.findById(id).orElseThrow(() -> new ResourceAccessException("Article with id: " + id + " not found.")
+        LOGGER.info("Getting article by ID: " + id);
+        return articleRepository.findById(id).orElseThrow(() -> new ArticleException("Article with id: " + id + " not found.")
         );
     }
 
     public Article createArticle(ArticleCreateRequest newArticle){
-
+        LOGGER.info("Creating new article");
         isValidArticleRequest(newArticle);
 
         Article article = new Article();
@@ -54,22 +54,20 @@ public class ArticleService {
     }
 
     public Article updateArticle(Integer id, ArticleUpdateRequest updatedArticle){
-        LOGGER.error("Article ID: " + id);
+        LOGGER.info("Updating Article ID: " + id);
         return articleRepository.findById(id).map(article -> {
                 article.setCategory(updatedArticle.category());
                 article.setContent(updatedArticle.content());
                 article.setTitle(updatedArticle.title());
                 article.setTags(updatedArticle.tags());  
             return articleRepository.save(article);
-        }).orElseThrow(() -> new ResourceAccessException("Article not found"));
+        }).orElseThrow(() -> new ArticleException("Article not found"));
     }
 
     public String deleteArticleById(Integer id){
-        try {
-            this.getArticleById(id);
-        } catch (Exception e) {
-            new ResourceAccessException("Article with id: " + id + " not found.");
-        }
+
+        this.getArticleById(id);
+
         articleRepository.deleteById(id);
 
         return "Deleted article with id: " + id;
