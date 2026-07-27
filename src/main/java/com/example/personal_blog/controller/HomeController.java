@@ -11,6 +11,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,36 +36,36 @@ public class HomeController {
     @GetMapping("/api/v1/public/articles")
     public ResponseEntity<List<Article>> articles(){
         LOGGER.info("Calling ArticleService");
-        return ResponseEntity.ok().body(articleService.getAllArticles());
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.getAllArticles());
     }
 
     @GetMapping("/api/v1/public/articles/{id}")
     public ResponseEntity<Article> articleById(@PathVariable Integer id){
-        return ResponseEntity.ok().body(articleService.getArticleById(id));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(articleService.getArticleById(id));
     }
 
     @GetMapping("/api/v1/admin/articles")
     public ResponseEntity<List<Article>> adminArticles(){
         LOGGER.info("Calling ArticleService");
-        return ResponseEntity.ok().body(articleService.getAllArticles());
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.getAllArticles());
     }
 
     @PostMapping("/api/v1/admin/articles")
     public ResponseEntity<Article> createArticle(@Valid @RequestBody ArticleCreateRequest request){
             Article response = articleService.createArticle(request);
-            return ResponseEntity.ok(response);  
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);  
     }
 
     @PutMapping("/api/v1/admin/articles/{id}")
-    public ResponseEntity<Article> updateArticle(@Valid @PathVariable Integer id, @RequestBody ArticleUpdateRequest request){
+    public ResponseEntity<Article> updateArticle(@PathVariable Integer id, @Valid @RequestBody ArticleUpdateRequest request){
         LOGGER.info("Put request {}", request);
         Article response = articleService.updateArticle(id, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
         
     }
 
     @DeleteMapping("/api/v1/admin/articles/{id}")
     public ResponseEntity<String> deleteArticle(@PathVariable Integer id, Authentication authentication){
-        return ResponseEntity.ok().body(articleService.deleteArticleById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.deleteArticleById(id));
     }
 }
