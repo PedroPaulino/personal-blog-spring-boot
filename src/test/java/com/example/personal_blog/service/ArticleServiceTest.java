@@ -163,6 +163,101 @@ public class ArticleServiceTest {
         assertEquals(savedArticle.getTitle(), response.getTitle());
 
     }
+
+    @Test
+    void shouldThrowExceptionWhenArticleRequestTitleIsNull(){
+        
+        // Arrange
+        ArticleCreateRequest request = new ArticleCreateRequest(
+            null,
+            content,
+            "JAVA",
+            "test,test2"
+        );
+
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.createArticle(request));
+
+        // Assert
+        assertEquals("The fields cannot be null", exception.getMessage());
+        
+    }
+
+    @Test
+    void shouldThrowExceptionWhenArticleRequestTitleIsEmptyOrBlank(){
+        
+        // Arrange
+        ArticleCreateRequest request = new ArticleCreateRequest(
+            "",
+            content,
+            "JAVA",
+            "test,test2"
+        );
+
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.createArticle(request));
+
+        // Assert
+        assertEquals("Article Title must be filled", exception.getMessage());
+        
+    }
+
+    @Test
+    void shouldThrowExceptionWhenArticleRequestContentIsBelow240Chars(){
+        
+        // Arrange
+        ArticleCreateRequest request = new ArticleCreateRequest(
+            "Article Test Title",
+            "a".repeat(239),
+            "JAVA",
+            "test,test2"
+        );
+
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.createArticle(request));
+
+        // Assert
+        assertEquals("Article Content must be higher than 240 chars.", exception.getMessage());
+        
+    }
+
+    @Test
+    void shouldThrowExceptionWhenArticleRequestCategoryIsEmptyOrBlank(){
+        
+        // Arrange
+        ArticleCreateRequest request = new ArticleCreateRequest(
+            "Article Test Title",
+            content,
+            "",
+            "test,test2"
+        );
+
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.createArticle(request));
+
+        // Assert
+        assertEquals("Article Category must be filled.", exception.getMessage());
+        
+    }
+
+    @Test
+    void shouldThrowExceptionWhenArticleRequestTagsIsEmptyOrBlank(){
+        
+        // Arrange
+        ArticleCreateRequest request = new ArticleCreateRequest(
+            "Article Test Title",
+            content,
+            "JAVA",
+            ""
+        );
+
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.createArticle(request));
+
+        // Assert
+        assertEquals("Article Tags must be filled.", exception.getMessage());
+        
+    }
     
     @Test
     void shouldUpdateArticleSuccessfully(){
@@ -201,6 +296,27 @@ public class ArticleServiceTest {
         assertEquals("Old Tags", savedArticle.getTags());
         
         assertEquals("New Title", response.getTitle());
+        
+    }
+
+    @Test
+    void shouldThrowExceptionWhenArticleUpdateIdIsNotFound(){
+        
+        // Arrange
+        ArticleUpdateRequest request = new ArticleUpdateRequest(
+            "New Title",
+            "Old Content",
+            "Old Category",
+            "Old Tags");
+
+        when(articleRepository.findById(1))
+            .thenReturn(Optional.empty());
+        
+        // Act
+        ArticleException exception = assertThrows(ArticleException.class, () -> articleService.updateArticle(1, request));
+        
+        // Assert
+        assertEquals("Article not found", exception.getMessage());
         
     }
 

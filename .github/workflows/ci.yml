@@ -8,12 +8,16 @@ on:
     pull_request:
         branches:
             - main
+
+permissions:
+  contents: read
+
 jobs:
     build:
         runs-on: ubuntu-latest
         
         steps:
-            - name: checkout repository
+            - name: Checkout Repository
               uses: actions/checkout@v4
 
             - name: Setup Java 17
@@ -23,8 +27,16 @@ jobs:
                 java-version: '17'
                 cache: maven
 
-            - name: Grant execute permission
+            - name: Grant Execute Permission
               run: chmod +x mvnw
 
-            - name: Build and Test
+            - name: Build Project
               run: ./mvnw clean verify
+
+            - name: Upload JaCoCo Report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                name: jacoco-report
+                path: target/site/jacoco/
+                retention-days: 14
