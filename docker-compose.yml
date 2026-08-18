@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:17
+
+    container_name: personal-blog-db
+
+    environment:
+      POSTGRES_DB_URL: ${POSTGRES_DB_URL}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+        - postgres-data:/var/lib/postgresql/data
+  
+  app:
+    build: .
+
+    container_name: personal-blog-app
+
+    depends_on:
+      - postgres
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      POSTGRES_DB_URL: ${POSTGRES_DB_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+
+      USER_USERNAME: ${USER_USERNAME}
+      USER_PASSWORD: ${USER_PASSWORD}
+
+  frontend:
+    build: ./frontend
+
+    container_name: personal-blog-frontend
+
+    depends_on:
+      - app
+
+    ports:
+      - "3000:80"
+
+volumes:
+  postgres-data:

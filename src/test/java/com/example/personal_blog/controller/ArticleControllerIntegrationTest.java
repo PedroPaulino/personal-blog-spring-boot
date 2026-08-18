@@ -45,9 +45,9 @@ public class ArticleControllerIntegrationTest {
 
     private String content = "a".repeat(250);
 
-    private String adminUser = "admin";
+    private String adminUser = "test-admin";
 
-    private String adminPwd = "admin123";
+    private String adminPwd = "test-password";
 
     @BeforeEach
     void setup(){
@@ -119,7 +119,7 @@ public class ArticleControllerIntegrationTest {
         //String json = objectMapper.writeValueAsString(request);
 
         mockMvc.perform(get("/api/v1/admin/articles")
-            .with(httpBasic("admin","admin123")))
+            .with(httpBasic(adminUser,adminPwd)))
             //.contentType(MediaType.APPLICATION_JSON)
             //.content(json))
             .andExpect(status().isOk())
