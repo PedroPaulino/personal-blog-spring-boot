@@ -40,9 +40,29 @@ jobs:
 
             - name: Build Project
               run: |
-                ./mvnw clean package -DskipTests=false
-                echo "====== JARS ======"
-                find target -type f -name "*.jar"
+                    echo "=== Maven version ==="
+                    ./mvnw --version
+
+                    echo "=== Project packaging ==="
+                    ./mvnw help:evaluate \
+                      -Dexpression=project.packaging \
+                      -q \
+                      -DforceStdout
+
+                    echo "=== Build directory ==="
+                    ./mvnw help:evaluate \
+                      -Dexpression=project.build.directory \
+                      -q \
+                      -DforceStdout
+
+                    echo "=== Running package ==="
+                    ./mvnw clean package
+
+                    echo "=== Checking target ==="
+                    ls -lah target
+
+                    echo "=== Checking JAR ==="
+                    find target -type f -name "*.jar" -print
 
             - name: Verify JAR
               run: |
