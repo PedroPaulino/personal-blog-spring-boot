@@ -36,12 +36,16 @@ jobs:
               run: chmod +x mvnw
 
             - name: Build Project
-              run: mvnw clean package
+              run: ./mvnw clean package
 
             - name: Verify JAR
               run: |
                 echo "Current directory:"
                 pwd
+                echo "List files:"
+                ls -la
+                echo "Find JAR:"
+                find . -name "*.jar"
                 echo "Target contents:"
                 ls -lah target/
                 echo "JAR files:"
