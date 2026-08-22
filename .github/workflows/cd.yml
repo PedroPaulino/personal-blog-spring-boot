@@ -40,6 +40,16 @@ jobs:
 
             - name: Build Project
               run: |
+                    echo "=== JAVA ==="
+                    java -version
+
+                    echo "=== Maven Wrapper ==="
+                    ls -lah mvnw
+                    file mvnw
+
+                    echo "=== Maven Wrapper permissions ==="
+                    start mvnw
+
                     echo "=== Maven version ==="
                     ./mvnw --version
 
