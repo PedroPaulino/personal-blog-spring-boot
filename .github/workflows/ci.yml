@@ -29,6 +29,14 @@ jobs:
 
             - name: Grant Execute Permission
               run: chmod +x mvnw
+            
+            - name: Check test configuration
+              run: |
+                echo "=== Test resources ==="
+                find src/test/resources -type f -print
+
+                echo "=== Application-test.properties ==="
+                cat src/test/resources/application-test.properties
 
             - name: Build Project
               run: ./mvnw clean verify
