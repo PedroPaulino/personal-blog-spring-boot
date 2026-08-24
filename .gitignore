@@ -126,7 +126,7 @@ logs/
 # FRAMEWORK-SPECIFIC PATTERNS
 # ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-**/application-*.properties
+**/application.properties
 **/application-*.yml
 **/application.properties
 **/application.yml
