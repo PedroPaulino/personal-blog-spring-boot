@@ -39,53 +39,7 @@ jobs:
               run: echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
 
             - name: Build Project
-              run: |
-                    echo "=== JAVA ==="
-                    java -version
-
-                    echo "=== Maven Wrapper ==="
-                    ls -lah mvnw
-                    file mvnw
-
-                    echo "=== Maven Wrapper permissions ==="
-                    start mvnw
-
-                    echo "=== Maven version ==="
-                    ./mvnw --version
-
-                    echo "=== Project packaging ==="
-                    ./mvnw help:evaluate \
-                      -Dexpression=project.packaging \
-                      -q \
-                      -DforceStdout
-
-                    echo "=== Build directory ==="
-                    ./mvnw help:evaluate \
-                      -Dexpression=project.build.directory \
-                      -q \
-                      -DforceStdout
-
-                    echo "=== Running package ==="
-                    ./mvnw clean package
-
-                    echo "=== Checking target ==="
-                    ls -lah target
-
-                    echo "=== Checking JAR ==="
-                    find target -type f -name "*.jar" -print
-
-            - name: Verify JAR
-              run: |
-                echo "Current directory:"
-                pwd
-                echo "List files:"
-                ls -la
-                echo "Find JAR:"
-                find . -name "*.jar"
-                echo "Target contents:"
-                ls -lah target/
-                echo "JAR files:"
-                find target -name "*.jar" -type f
+              run: ./mvnw clean package
 
             - name: Log in to GHCR
               uses: docker/login-action@v3
