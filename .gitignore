@@ -127,7 +127,6 @@ logs/
 # ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 **/application-*.yml
-**/application.properties
 **/application.yml
 *.cer
 *.class
