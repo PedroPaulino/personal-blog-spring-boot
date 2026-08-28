@@ -21,6 +21,9 @@ services:
   app:
     image: ghcr.io/pedropaulino/personal-blog-spring-boot:latest
 
+    env_file:
+      - .env
+
     container_name: personal-blog-app
 
     depends_on:
@@ -29,17 +32,6 @@ services:
     ports:
       - "8080:8080"
 
-    environment:
-      POSTGRES_DB_URL: ${POSTGRES_DB_URL}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-
-      ADMIN_USERNAME: ${ADMIN_USERNAME}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-
-      USER_USERNAME: ${USER_USERNAME}
-      USER_PASSWORD: ${USER_PASSWORD}
 
   frontend:
     build: ./frontend
